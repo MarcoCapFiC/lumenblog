@@ -24,7 +24,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
     protected $table = 'User';
 
-    protected function getFullNameAttribute(): string{
+    protected $appends = ['full_name'];
+
+    public function getFullNameAttribute(){
         return $this->first_name . ' ' . $this->last_name;
     }
 

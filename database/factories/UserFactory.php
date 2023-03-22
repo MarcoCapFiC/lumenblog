@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class UserFactory extends Factory
 {
@@ -22,8 +23,13 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name,
+            'first_name' => $this->faker->firstName,
+            'last_name' => $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
+            'password' => $this->faker->password,
+            'api_token' => Str::random(10),
+            'picture' => $this->faker->image,
+            'subscription' => $this->faker->randomElement(['free', 'premium']),
         ];
     }
 }

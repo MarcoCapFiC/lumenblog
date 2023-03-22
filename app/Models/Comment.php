@@ -9,6 +9,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Laravel\Lumen\Auth\Authorizable;
 
 class Comment extends Model implements AuthenticatableContract, AuthorizableContract
@@ -31,5 +32,10 @@ class Comment extends Model implements AuthenticatableContract, AuthorizableCont
     public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class);
+    }
+
+    public function likes(): MorphMany
+    {
+        return $this->morphMany(Like::class, 'likeable');
     }
 }
