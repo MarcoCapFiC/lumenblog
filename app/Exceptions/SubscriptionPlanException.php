@@ -11,6 +11,6 @@ class SubscriptionPlanException extends Exception
     public function render(Request $request): Response
     {
         $errorMessage = json_encode('Per accedere a questa funzionalità è necessario fare l\'upgrade del piano');
-        return response($errorMessage, 407);
+        return response($errorMessage, 403);
     }
 }

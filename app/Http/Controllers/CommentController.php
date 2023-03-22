@@ -58,7 +58,6 @@ class CommentController extends Controller
         $canEdit = $request->user()->can('update', $editComment);
         if (!$canEdit)
             throw new SubscriptionPlanException();
-            //return response([], 403);
 
         $editComment->update($request->all());
         return response($editComment);
@@ -69,7 +68,7 @@ class CommentController extends Controller
         $comment = Comment::findorfail($commentId);
         $canEdit = $request->user()->can('delete',$comment);
         if (!$canEdit)
-            return response([], 403);
+            throw new SubscriptionPlanException();
 
         $comment->delete();
         return response([]);
