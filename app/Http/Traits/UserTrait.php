@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Auth;
 
 trait UserTrait{
 
-    private $loggedUserId = -1;
     public function getUserId(){
         /** @var User $user */
         $user = Auth::user();
@@ -15,6 +14,5 @@ trait UserTrait{
 
     public function setUserId(){
         $this->user_id = $this->getUserId();
-        $this->save();
     }
 }

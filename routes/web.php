@@ -21,9 +21,6 @@ $router->get('greetings', function () use ($router) {
     return 'Hello world';
 });
 
-//$router->get('users', ['uses' => 'UserController@showAllUsers']);
-//$router->get('comments', ['uses' => 'CommentController@showAllComments']);
-
 //1
 $router->get('posts', ['uses' => 'PostController@showAllPosts']);
 //2
@@ -48,3 +45,14 @@ $router->delete('comments/{commentId}', ['middleware' => ['auth'], 'uses' => 'Co
 $router->post('auth/register', ['uses' => 'UserController@addUser']);
 //12
 $router->post('auth/login', ['uses' => 'UserController@loginUser']);
+
+
+$router->group(['middleware' => ['auth']], function () use ($router) {
+
+    $router->group(['prefix' => 'likes'], function () use ($router) {
+        $router->post('', ['uses' => 'LikeController@newLike']);
+        $router->delete('{likeId}', ['uses' => 'LikeController@deleteLike']);
+
+    });
+});
+

@@ -26,7 +26,8 @@ class Post extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
     protected $hidden = [];
     protected $table = 'Post';
-    public $timestamps = true;
+
+    protected $withCount = ['likes'];
 
     public function user(): BelongsTo
     {

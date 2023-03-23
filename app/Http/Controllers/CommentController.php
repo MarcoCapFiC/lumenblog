@@ -49,6 +49,7 @@ class CommentController extends Controller
         ]);
         $newComment = Comment::create($request->all());
         $newComment->setUserId();
+        $newComment->save();
         return response($newComment, 201);
     }
 

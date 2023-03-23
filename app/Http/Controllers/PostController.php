@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Traits\UserTrait;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -40,7 +39,6 @@ class PostController extends Controller
             ->where('Post.id', '=', $postId)
             ->get();
 
-
         return response($post);
     }
 
@@ -53,6 +51,7 @@ class PostController extends Controller
         /** @var Post $newPost */
         $newPost = Post::create($request->all());
         $newPost->setUserId();
+        $newPost->save();
         return response($newPost, 201);
     }
 

@@ -22,6 +22,8 @@ class Comment extends Model implements AuthenticatableContract, AuthorizableCont
     ];
     protected $hidden = [];
     protected $table = 'Comment';
+    protected $withCount = ['likes'];
+
     public $timestamps = true;
 
     public function user(): BelongsTo
