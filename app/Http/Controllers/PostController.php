@@ -49,7 +49,8 @@ class PostController extends Controller
             'content' => 'required'
         ]);
         /** @var Post $newPost */
-        $newPost = Post::create($request->all());
+        $newPost = new Post();
+        $newPost->fill($request->all());
         $newPost->setUserId();
         $newPost->save();
         return response($newPost, 201);
@@ -57,7 +58,9 @@ class PostController extends Controller
 
     public function editPost($postId, Request $request): Response
     {
+        /** @var Post $editPost */
         $editPost = Post::findOrFail($postId);
+        /** @var bool $canEdit */
         $canEdit = $request->user()->can('update', $editPost);
         if (!$canEdit)
             return response([], 403);
@@ -68,7 +71,9 @@ class PostController extends Controller
 
     public function deletePost(Request $request, $postId): Response
     {
+        /** @var Post $post */
         $post = Post::findorfail($postId);
+        /** @var bool $canDelete */
         $canDelete = $request->user()->can('delete', $post);
         if (!$canDelete)
             return response([], 403);

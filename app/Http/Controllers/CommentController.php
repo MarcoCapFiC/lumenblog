@@ -47,7 +47,8 @@ class CommentController extends Controller
             'post_id' => 'required',
             'content' => 'required'
         ]);
-        $newComment = Comment::create($request->all());
+        $newComment = new Comment();
+        $newComment->fill($request->all());
         $newComment->setUserId();
         $newComment->save();
         return response($newComment, 201);
@@ -55,7 +56,9 @@ class CommentController extends Controller
 
     public function editComment(Request $request, $commentId): Response
     {
+        /** @var Comment $editComment */
         $editComment = Comment::findorfail($commentId);
+        /** @var bool $canEdit */
         $canEdit = $request->user()->can('update', $editComment);
         if (!$canEdit)
             throw new SubscriptionPlanException();
@@ -66,8 +69,10 @@ class CommentController extends Controller
 
     public function deleteComment(Request $request, int $commentId): Response
     {
+        /** @var Comment $comment */
         $comment = Comment::findorfail($commentId);
-        $canEdit = $request->user()->can('delete',$comment);
+        /** @var bool $canEdit */
+        $canEdit = $request->user()->can('delete', $comment);
         if (!$canEdit)
             throw new SubscriptionPlanException();
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\SubscriptionPlanException;
 use App\Models\Like;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,7 +14,7 @@ class LikeController extends Controller
             'likeable_id' => 'required',
             'likeable_type' => 'required',
         ]);
-
+        /** @var bool $canCreate */
         $canCreate = $request->user()->can('create', Like::class);
         if (!$canCreate)
             return response([], 403);
@@ -38,7 +37,9 @@ class LikeController extends Controller
 
     public function deleteLike(Request $request, int $likeId): Response
     {
+        /** @var Like $like */
         $like = Like::findorfail($likeId);
+        /** @var bool $canEdit */
         $canEdit = $request->user()->can('delete', $like);
         if (!$canEdit)
             return response([], 403);

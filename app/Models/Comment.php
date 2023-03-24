@@ -20,11 +20,16 @@ class Comment extends Model implements AuthenticatableContract, AuthorizableCont
     protected $fillable = [
         'post_id', 'content'
     ];
-    protected $hidden = [];
+    protected $hidden = ['id'];
     protected $table = 'Comment';
     protected $withCount = ['likes'];
 
-    public $timestamps = true;
+    protected $appends = ['auth_user_liked_comment'];
+
+    public function getAuthUserLikedCommentAttribute(): bool
+    {
+        return $this->likes()->where('user_id', auth()->id())->exists();
+    }
 
     public function user(): BelongsTo
     {

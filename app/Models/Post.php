@@ -26,8 +26,13 @@ class Post extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
     protected $hidden = [];
     protected $table = 'Post';
-
     protected $withCount = ['likes'];
+    protected $appends = ['auth_user_liked_post'];
+
+    public function getAuthUserLikedPostAttribute(): bool
+    {
+        return $this->likes()->where('user_id', auth()->id())->exists();
+    }
 
     public function user(): BelongsTo
     {
