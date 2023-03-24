@@ -24,7 +24,10 @@ class UserController extends Controller
             'picture' => 'required',
             'subscription' => 'required'
         ]);
-        $newUser = User::create($request->all());
+        $newUser = new User();
+        $newUser->fill($request->all());
+        $newUser->password = $request->get('password');
+        $newUser->save();
         return response($newUser, 201);
     }
 

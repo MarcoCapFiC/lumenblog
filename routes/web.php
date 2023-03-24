@@ -21,38 +21,42 @@ $router->get('greetings', function () use ($router) {
     return 'Hello world';
 });
 
-//1
-$router->get('posts', ['uses' => 'PostController@showAllPosts']);
-//2
-$router->get('posts/{postId}', ['uses' => 'PostController@showOnePost']);
-//3
-$router->post('posts', ['middleware' => ['auth'], 'uses' => 'PostController@newPost']);
-//4
-$router->put('posts/{postId}', ['middleware' => ['auth'], 'uses' => 'PostController@editPost']);
-//5
-$router->delete('posts/{postId}', ['middleware' => ['auth'], 'uses' => 'PostController@deletePost']);
-//6
-$router->get('comments', ['uses' => 'CommentController@showSinglePostComments']);
-//7
-$router->get('comments/{commentId}', ['uses' => 'CommentController@showOneComment']);
-//8
-$router->post('comments', ['middleware' => ['auth'], 'uses' => 'CommentController@newComment']);
-//9
-$router->put('comments/{commentId}', ['middleware' => ['auth'], 'uses' => 'CommentController@editComment']);
-//10
-$router->delete('comments/{commentId}', ['middleware' => ['auth'], 'uses' => 'CommentController@deleteComment']);
-//11
-$router->post('auth/register', ['uses' => 'UserController@addUser']);
-//12
-$router->post('auth/login', ['uses' => 'UserController@loginUser']);
+//1, 2, 3, 4, 5
+$router->group(['prefix' => 'posts'], function () use ($router) {
 
+    $router->get('', ['uses' => 'PostController@showAllPosts']);
+    $router->get('{postId}', ['uses' => 'PostController@showOnePost']);
 
-$router->group(['middleware' => ['auth']], function () use ($router) {
-
-    $router->group(['prefix' => 'likes'], function () use ($router) {
-        $router->post('', ['uses' => 'LikeController@newLike']);
-        $router->delete('{likeId}', ['uses' => 'LikeController@deleteLike']);
-
+    $router->group(['middleware' => ['auth']], function () use ($router) {
+        $router->post('', ['uses' => 'PostController@newPost']);
+        $router->put('{postId}', ['uses' => 'PostController@editPost']);
+        $router->delete('{postId}', ['uses' => 'PostController@deletePost']);
     });
 });
 
+//6, 7, 8, 9, 10
+$router->group(['prefix' => 'comments'], function () use ($router) {
+
+    $router->get('', ['uses' => 'CommentController@showSinglePostComments']);
+    $router->get('{commentId}', ['uses' => 'CommentController@showOneComment']);
+
+    $router->group(['middleware' => ['auth']], function () use ($router) {
+        $router->post('', ['uses' => 'CommentController@newComment']);
+        $router->put('{commentId}', ['uses' => 'CommentController@editComment']);
+        $router->delete('{commentId}', ['uses' => 'CommentController@deleteComment']);
+    });
+});
+
+//11, 12
+$router->group(['prefix' => 'auth'], function () use ($router) {
+    $router->post('register', ['uses' => 'UserController@addUser']);
+    $router->post('login', ['uses' => 'UserController@loginUser']);
+});
+
+$router->group(['prefix' => 'likes'], function () use ($router) {
+
+    $router->group(['middleware' => ['auth']], function () use ($router) {
+        $router->post('', ['uses' => 'LikeController@newLike']);
+        $router->delete('{likeId}', ['uses' => 'LikeController@deleteLike']);
+    });
+});
